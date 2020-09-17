@@ -12,67 +12,6 @@
     <p class="txt">这是一段文本</p>
     <h2>world</h2>
   </body>
-  <!-- <script src="./underscore/curry"></script> -->
-  <script>
-    let h1 = document.querySelector('h1')
-    let h2 = document.querySelector('h2')
-    let tt = document.querySelector('p')
-    let body = document.querySelector('body')
-    h1.insertAdjacentHTML('afterbegin', `<a>嘿~</a>`)
-    h1.replaceWith(h2)
-    console.log(tt.matches('.txt'))
-    console.log(body.contains(tt))
-    // function add() {
-    //   debugger
-    //   // 第一次执行时，定义一个数组专门用来存储所有的参数
-    //   var _args = Array.prototype.slice.call(arguments)
-
-    //   // 在内部声明一个函数，利用闭包的特性保存_args并收集所有的参数值
-    //   var _adder = function() {
-    //     debugger
-    //     _args.push(...Array.from(arguments))
-    //     return _adder
-    //   }
-
-    //   // 利用toString隐式转换的特性，当最后执行时隐式转换，并计算最终的值返回
-    //   _adder.toString = function() {
-    //     return _args.reduce(function(a, b) {
-    //       return a + b
-    //     })
-    //   }
-    //   return _adder
-    // }
-
-    // console.log(add(1, 2)(3)(4))
-
-    // BOM 浏览器对象模型
-    // wondow.innerHeight window.innerWidth  window.open window.close() window.resizeTo()
-
-    let a = 1
-    delete a
-    window.b = 2
-    delete b
-    a.name = 'aa' // string/number/boolean 都是基本数据类型，对其赋值其它类型，不成功
-    console.log(a)
-    // console.log(a, b)
-    // console.log(c)  //要报错
-    // console.log(window.c)  不报错 undifined
-    console.log(location)
-    let btn = document.getElementById('btn')
-    btn.onclick = function() {
-      window.location.replace('./继承/test.html')
-    }
-    console.log(window.history)
-    console.log(window.navigator)
-
-    try {
-      function d() {
-        d.b
-      }
-      d()
-    } catch (e) {
-      debugger
-      console.log('error', e)
-    }
-  </script>
+  <script src="./instanceOf.js"></script>
+  <script></script>
 </html>

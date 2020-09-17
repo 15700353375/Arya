@@ -20,3 +20,4 @@
 // contains parentNodes.contains(child)
 
 // BOM浏览器对象模型
+// wondow.innerHeight window.innerWidth  window.open window.close() window.resizeTo()
