@@ -14,7 +14,7 @@ function _new(Func, ...args) {
   // 改变this指向
   let result = Func.call(obj, ...args)
 
-  // 分析幻术返回值
+  // 分析函数返回值
   if (result !== null && /^(object|function)$/.test(typeof result)) {
     return result
   }
@@ -26,3 +26,22 @@ function _new(Func, ...args) {
 // 可以使用Object.create(prototype)创建出来的实例的__proto__指向prototype
 
 // 我们要实现 obj.__proto__ = Func.prototype  也就是 Object.create(Func.prototype)
+
+var fun = function(name) {
+  this.name = name
+
+  // return 1  //返回的如果是个基本类型  跟不返回无异
+
+  return {
+    name: 'jack',
+    age: 22
+  }
+}
+
+fun.prototype.fn1 = function() {
+  console.log('fn1被执行')
+}
+
+let ff = _new(fun, '刘诗诗')
+console.log(ff)
+// ff.fn1()  //报错   有返回值时  不能使用构造函数的原型对象
