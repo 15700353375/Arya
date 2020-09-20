@@ -12,7 +12,7 @@ function unique(arr) {
 }
 let arr = [12, 23, 12, 15, 25, 23, 16, 25, 16]
 
-// console.log(unique(arr))
+console.log(unique(arr))
 
 /* 排序后去重 */
 function unique2(arr) {
@@ -39,4 +39,20 @@ function unique3(arr) {
   return newArr
 }
 
-console.log(unique2(arr))
+console.log(unique3(arr))
+
+/* 双重遍历去重 */
+function unique4(arr){
+  let newArr =[]
+  for(let i=0;i<arr.length;i++){
+    for(var j=0;j<newArr.length;j++){
+      if(arr[i] == newArr[j]) break      
+    }
+    if(j==newArr.length){
+      newArr.push(arr[i])
+    }
+  }
+  return newArr
+}
+
+console.log(unique4(arr))
