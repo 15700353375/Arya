@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>requestIdelCallback</title>
+</head>
+<body>
+      <div id ="ui">0</div>
+      <div>执行<span id="test">0</span></div>
+      <button onclick = "mytest()">常规执行计算任务</button>
+      <button onclick = "startRequestIdleCallback()">在requestIdleCallback中执行计算任务</button>
+<script>
+var tasksNum = 10000
+ 
+ requestIdleCallback(unImportWork)
+  
+ function unImportWork(deadline) {
+   while (deadline.timeRemaining() && tasksNum > 0) {
+     console.log(`执行了${10000 - tasksNum + 1}个任务`)
+     tasksNum--
+   }
+  
+   if (tasksNum > 0) { // 在未来的帧中继续执行
+     requestIdleCallback(unImportWork)
+   }
+ }
+</script>
+</body>
+</html>

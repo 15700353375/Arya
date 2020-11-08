@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>study</title>
+    <style>
+      #box{
+        width: 500px;
+        height: 500px;
+        border: 1px solid #000;
+      }
+    </style>
   </head>
   <body>
     <!-- <input type="text" id="inputVal" /> -->
@@ -11,7 +18,185 @@
     <h1>hello</h1>
     <p class="txt">这是一段文本</p>
     <h2>world</h2>
+    <div id="box"></div>
   </body>
-  <script src="./数组reduce手动实现.js"></script>
-  <script></script>
+  <!-- <script src="./数组reduce手动实现.js"></script> -->
+  <script>
+    // 拷贝  分为深拷贝和浅拷贝  深拷贝 层层拷贝所有数据  浅拷贝 只拷贝第一层的内容。
+    /* 先写一个方法来判断数据类型 */
+    function isNormalType(obj){
+      let type = Object.prototype.toString.call(obj) //最准确的判断方式
+      if(type === '[object Object]'){
+        return 'object'
+      }else if( type === '[object Array]'){
+        return 'array'
+      }else{
+        return false
+      }
+    }
+  /* 浅克隆 只克隆第一层*/
+  function clone(obj){
+    let type = isNormalType(obj)
+    // 基础类型 =》数据存在栈中，不需要克隆
+    if(!type) return 
+    let cloneTarget = type == 'array'? []:{}
+    for(let key in obj){
+      // 判断是否是自身可枚举属性
+      if(obj.hasOwnProperty(key)){
+        cloneTarget[key] = obj[key]
+      }
+    }
+    return cloneTarget
+  }
+
+  let obj = {
+    a:1,
+    b:{
+      c:2
+    }
+  }
+
+  let obj1 = clone(obj)
+  obj1.a = 3 
+  obj1.b.c = 4
+  console.log(obj,obj1) //可以发现浅克隆 第一层的数据改变不会改变原对象  内层数据改变会改变原对象
+
+
+  /* 深拷贝 使用递归的方式将内层数据全部拷贝*/
+  function _clone(obj){
+    let type = isNormalType(obj)
+    if(!type) return 
+    let cloneTarget = type === 'array' ? [] : {}
+    for(let key in obj){
+      if(isNormalType(obj[key])){
+        cloneTarget[key]=_clone(obj[key])
+      }else{
+        cloneTarget[key] = obj[key]
+      }
+    }
+    return cloneTarget
+  }
+
+  let obj2 = _clone(obj)
+  obj2.a = 5
+  obj2.b.c =6
+  console.log(obj2,obj)
+
+
+  /* instanceOf  构造函数的原型是否在实例的原型链上  obj instanceOf 构造函数 */
+  function Person(name){
+    this.name = name
+  }
+  let person1 = new Person('lili')
+  console.log(person1 instanceof Object)
+
+  function _instanceOf(obj,constr){
+    // 构造函数的原型
+    constr = constr.prototype
+    // 有些浏览器没有__proto__这个方法，可以用Object.getPrototypeOf代替 
+    let proto = obj.__proto__
+    while(true){
+      // 没找到
+      if(proto === null){
+        return false
+      }else if(proto === constr){
+        return true
+      }
+      proto = proto.__proto__
+    }
+  }
+
+  // 让我们来测试一下写的对不对啊
+  console.log(_instanceOf(person1,Person))
+  console.log(Object.getPrototypeOf(person1),person1.__proto__, Person.prototype)
+
+  /* 防抖函数 */
+  // 防抖的本质是减少事件执行，减少资源浪费，那么，本来频繁触发的事件，这个时候。我们希望它在用户暂时停止操作时再触发。
+  function _debounce(fn,wait){
+    let timer = null
+    
+    return function(){
+      if(timer) clearTimeout(timer)
+      timer = setTimeout(function(){
+        fn.apply(this,arguments)
+      },wait)
+    }
+  } 
+
+  let box = document.getElementById('box')
+  let count = 0
+  let counts =function() {
+    count ++
+    box.innerHTML = count
+  }
+  // box.onmousemove=counts
+
+
+
+  // box.onmousemove= _debounce(counts,1000)
+
+  /* 鼠标一移动就触发了几十上百次，这肯定不是我们想要的，我们希望移动完了1s之后触发 */
+
+  /* 还有一种情况，我们希望立即触发，而不是等待之后再触发 */
+  function debounce(fn,wait,immediate){
+    let timer = null
+    return function(){
+      if(timer) clearTimeout(timer)
+      if(immediate){
+        let callNow = !timer
+        // 指定时间后timer再次清空
+        timer = setTimeout(()=>{
+          timer = null
+        },wait)
+        // 只有timer为null的时候才会执行
+        if(callNow){
+          fn.apply(this,arguments)
+        }
+      }else{
+        timer = setTimeout(()=>{
+          fn.apply(this,arguments)
+        },wait)
+      }
+
+    }
+  }
+
+  box.onmousemove= debounce(counts,1000,true)
+
+  /* 节流函数  指定时间内执行一次 */
+  function throttle(fn,wait){
+    let timer = null
+    return function(){
+      if(!timer){
+        timer = setTimeout(()=>{
+          timer = null
+          fn.apply(this,arguments)
+        },wait)
+      }
+    }
+  }
+
+
+  /* Object.create(prototype) 传入构造函数的原型 返回的是构造函数的实例对象*/
+
+  function create(prototype){
+    if(prototype === null || typeof prototype !== 'object'){
+      throw new TypeError('传入原型数据类型不正常')
+    }
+    function Temp (){}
+    // 需要将传入的对象绑定到构造函数的原型上
+    Temp.prototype = prototype
+    // 我们需要返回实例
+    return new Temp
+
+    // 这样我们就可以得到构造函数的原型  == 实例的__proto__
+  }
+
+  function T(){
+    this.name ='tt'
+  }
+  let shili = create(T.prototype)
+
+  console.log(shili.__proto__)
+  </script>
 </html>

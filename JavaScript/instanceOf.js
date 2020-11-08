@@ -74,4 +74,8 @@ let obj2 = create(prototype)
 console.log(Object.getPrototypeOf(obj2) === prototype)
 let obj3 = create(null)
 
+
+
+
+
 /* 学习来源：https://juejin.im/post/6870319532955828231 */
